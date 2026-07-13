@@ -16,7 +16,7 @@ events AS (
         user_pseudo_id,
         event_timestamp,
         event_name,
-        event_date
+        PARSE_DATE('%Y%m%d', CAST(event_date AS STRING)) AS event_date
     FROM {{ ref('stg_ga4_events') }}
     WHERE event_name = 'page_view'
 ),
