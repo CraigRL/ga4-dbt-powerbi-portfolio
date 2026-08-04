@@ -10,7 +10,17 @@ WITH events AS (
         event_date,
         session_number,
         page_location
+
     FROM {{ ref('fct_events') }}
+
+    -- Ensure one event record per user/timestamp/event type
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            user_pseudo_id,
+            event_timestamp,
+            event_name
+        ORDER BY session_number
+    ) = 1
 ),
 
 items AS (
@@ -27,6 +37,7 @@ items AS (
         item_variant,
         price,
         quantity
+
     FROM {{ ref('stg_ga4_items') }}
 ),
 
@@ -52,9 +63,25 @@ joined AS (
         i.price,
         i.quantity,
 
-        SAFE_MULTIPLY(CAST(i.price AS FLOAT64), i.quantity) AS item_revenue
+        -- Item value at any ecommerce stage
+        SAFE_MULTIPLY(
+            CAST(i.price AS FLOAT64),
+            CAST(i.quantity AS FLOAT64)
+        ) AS item_value,
+
+        -- Realized revenue only for completed purchases
+        CASE
+            WHEN e.event_name = 'purchase'
+            THEN SAFE_MULTIPLY(
+                CAST(i.price AS FLOAT64),
+                CAST(i.quantity AS FLOAT64)
+            )
+            ELSE 0
+        END AS item_revenue
+
     FROM items i
-    JOIN events e
+
+    INNER JOIN events e
         ON i.user_pseudo_id = e.user_pseudo_id
         AND i.event_timestamp = e.event_timestamp
 )
@@ -79,7 +106,7 @@ SELECT
 
     price,
     quantity,
+    item_value,
     item_revenue
 
 FROM joined
-ORDER BY user_pseudo_id, session_number, event_timestamp, item_id
