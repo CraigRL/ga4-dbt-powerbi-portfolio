@@ -14,7 +14,7 @@ event_metrics AS (
     SELECT
         user_pseudo_id,
         session_number,
-        PARSE_DATE('%Y%m%d', CAST(event_date AS STRING)) AS event_date,
+        event_date,
         COUNT(*) AS total_events,
         COUNTIF(event_name = 'page_view') AS total_pageviews
     FROM {{ ref('fct_events') }}
@@ -25,7 +25,7 @@ revenue AS (
     SELECT
         user_pseudo_id,
         session_number,
-        PARSE_DATE('%Y%m%d', CAST(event_date AS STRING)) AS event_date,
+        event_date,
         SUM(item_revenue) AS session_revenue
     FROM {{ ref('fct_item_performance') }}
     GROUP BY 1, 2, 3
