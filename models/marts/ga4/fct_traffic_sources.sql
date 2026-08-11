@@ -54,16 +54,36 @@ session_traffic AS (
         s.session_start,
         s.session_end,
 
-        -- First traffic params in the session
-        ANY_VALUE(traffic_source) AS traffic_source,
-        ANY_VALUE(traffic_medium) AS traffic_medium,
-        ANY_VALUE(traffic_campaign) AS traffic_campaign
+        -- First non-null traffic params observed during the session
+        ARRAY_AGG(
+            e.traffic_source IGNORE NULLS
+            ORDER BY e.event_timestamp
+            LIMIT 1
+        )[SAFE_OFFSET(0)] AS traffic_source,
+
+        ARRAY_AGG(
+            e.traffic_medium IGNORE NULLS
+            ORDER BY e.event_timestamp
+            LIMIT 1
+        )[SAFE_OFFSET(0)] AS traffic_medium,
+
+        ARRAY_AGG(
+            e.traffic_campaign IGNORE NULLS
+            ORDER BY e.event_timestamp
+            LIMIT 1
+        )[SAFE_OFFSET(0)] AS traffic_campaign
+
     FROM sessions s
     LEFT JOIN events_with_traffic e
         ON s.user_pseudo_id = e.user_pseudo_id
         AND TIMESTAMP_MICROS(e.event_timestamp)
             BETWEEN s.session_start AND s.session_end
-    GROUP BY 1,2,3,4
+
+    GROUP BY
+        s.user_pseudo_id,
+        s.session_number,
+        s.session_start,
+        s.session_end
 ),
 
 -- Landing page for each session
