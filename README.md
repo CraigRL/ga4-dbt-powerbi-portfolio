@@ -132,6 +132,10 @@ Provides a high-level view of ecommerce performance, including:
 The purchase funnel follows progression from Product View through Add to Cart,
 Begin Checkout, and Purchase.
 
+#### Report Preview
+
+![GA4 Ecommerce Performance Overview](images/powerbi-overview.png)
+
 ### 2. Customer Journey Analysis
 
 Examines how users navigate through the ecommerce site.
@@ -150,6 +154,10 @@ paths were grouped into interpretable page types such as:
 
 The analysis shows the most common transitions between page types and compares
 exit rates across page categories.
+
+#### Report Preview
+
+![Customer Journey Analysis](images/powerbi-customer-journey.png)
 
 ### 3. Conversion Analysis
 
@@ -171,6 +179,10 @@ Compared with non-purchasers, purchasers generated approximately:
 - **5.8x** longer average session duration
 - **12.1x** as many pageviews per user
 - **9.4x** as many unique pages viewed
+
+#### Report Preview
+
+![Conversion Analysis](images/powerbi-conversion-analysis.png)
 
 ## Key Findings
 
