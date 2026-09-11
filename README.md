@@ -228,6 +228,21 @@ Page URLs were also grouped into semantic page types for customer-journey
 analysis because analysis of thousands of individual obfuscated URLs would not
 produce a useful business-level view.
 
+## Development Challenges
+
+Several issues required investigation and revision during development rather than straightforward transformation of the source data.
+
+Examples include:
+
+- Diagnosing inflated revenue values and revising item-level revenue logic so revenue was associated with appropriate purchase activity
+- Resolving GA4 event-date type differences between BigQuery/dbt models and Power BI
+- Investigating missing traffic-source attribution and distinguishing session-level traffic information from first-user acquisition scope
+- Designing a multi-fact Power BI model with shared dimensions while preserving appropriate filter behavior
+- Reconstructing customer navigation paths from event-level pageview data and grouping irregular URLs into business-readable page types
+- Testing and refining Power BI relationships and visual interactions so selections produced analytically meaningful results
+
+These decisions were validated through intermediate queries, model testing, and comparison of aggregate results before the final report was assembled.
+
 ## Tools & Technologies
 
 - **Google Analytics 4** — source event data
