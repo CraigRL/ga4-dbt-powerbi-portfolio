@@ -116,6 +116,8 @@ metric table supports the purchaser engagement comparison.
 
 The report contains three analytical pages.
 
+The Power BI report file is not included in the repository due to its size. Report pages are provided below as screenshots, while the dbt transformation models and project code are included in the repository.
+
 ### 1. Ecommerce Performance Overview
 
 Provides a high-level view of ecommerce performance, including:
