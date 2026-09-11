@@ -46,7 +46,9 @@ events_with_traffic AS (
         AND e.event_timestamp = tp.event_timestamp
 ),
 
--- Assign traffic source to sessions
+-- Assign session-level attribution using the first non-null
+-- source, medium, and campaign observed within each session window
+
 session_traffic AS (
     SELECT
         s.user_pseudo_id,
@@ -86,7 +88,8 @@ session_traffic AS (
         s.session_end
 ),
 
--- Landing page for each session
+-- Identify the first pageview in each session as the landing page
+
 landing_page AS (
     SELECT
         user_pseudo_id,
