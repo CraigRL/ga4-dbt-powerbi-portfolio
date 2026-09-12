@@ -14,7 +14,9 @@ WITH base AS (
     FROM {{ ref('fct_pageviews') }}
 ),
 
--- Normalize URLs for hashing
+-- Normalize URLs by removing query parameters and fragments
+-- so equivalent page locations share the same page key
+
 normalized AS (
     SELECT
         user_pseudo_id,
@@ -31,7 +33,9 @@ normalized AS (
     FROM base
 ),
 
--- Build ordered page sequences per session
+-- Build page-to-page transitions within each session;
+-- a null to_page represents the final pageview (session exit)
+
 ordered AS (
     SELECT
         user_pseudo_id,
