@@ -2,6 +2,7 @@
     materialized = 'view'
 ) }}
 
+-- Establish one row per session and calculate session duration
 WITH sessions AS (
     SELECT
         user_pseudo_id,
@@ -57,6 +58,8 @@ revenue AS (
     GROUP BY 1,2
 ),
 
+-- Combine session-level engagement, acquisition, navigation,
+-- and revenue metrics into a single session-grain dataset
 combined AS (
     SELECT
         s.user_pseudo_id,
@@ -111,7 +114,8 @@ exit_mode AS (
     GROUP BY 1,2
 ),
 
--- Aggregate to user level
+-- Aggregate session-level behavior to one row per user for
+-- customer-level engagement, acquisition, and revenue analysis
 user_agg AS (
     SELECT
         user_pseudo_id,
