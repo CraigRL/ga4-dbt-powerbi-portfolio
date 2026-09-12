@@ -1,0 +1,12 @@
+# dbt
+target/
+dbt_packages/
+logs/
+.env
+
+# Power BI
+*.pbix
+
+# OS / editor
+.DS_Store
+Thumbs.db
