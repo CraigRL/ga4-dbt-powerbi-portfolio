@@ -27,8 +27,7 @@ normalized AS (
         page_location,
         page_title,
         page_referrer,
-
-        
+     
         LOWER(REGEXP_REPLACE(page_location, r'(\?|#).*$', '')) AS normalized_page
     FROM base
 ),
